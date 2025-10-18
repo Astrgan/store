@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrewMaster - Оборудование для пивоварения</title>
+    <style>
+        /* Базовые стили */
+        :root {
+            --primary: #e67e22;
+            --secondary: #2c3e50;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --accent: #d35400;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Шапка */
+        header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: white;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-cart {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            margin-right: 1rem;
+        }
+
+        .search-box input {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+            width: 200px;
+        }
+
+        .cart-icon {
+            position: relative;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        /* Герой секция */
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1532634922-8fe0b757fb13?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: var(--accent);
+        }
+
+        /* Категории */
+        .categories {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--secondary);
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .category-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-img {
+            height: 200px;
+            background-color: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: var(--secondary);
+        }
+
+        .category-content {
+            padding: 1.5rem;
+        }
+
+        .category-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        /* Популярные товары */
+        .featured-products {
+            padding: 4rem 0;
+            background-color: var(--light);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-img {
+            height: 200px;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-content {
+            padding: 1.5rem;
+        }
+
+        .product-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        /* О нас */
+        .about {
+            padding: 4rem 0;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .about-image {
+            background-color: var(--light);
+            height: 300px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 5rem;
+            color: var(--secondary);
+        }
+
+        /* Преимущества */
+        .benefits {
+            padding: 4rem 0;
+            background-color: var(--light);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .benefit-item {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .benefit-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Подвал */
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-column ul li a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                margin: 1rem 0;
+            }
+
+            .search-box input {
+                width: 150px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Шапка -->
+<header>
+    <div class="container">
+        <div class="header-content">
+            <div class="logo">Brew<span>Master</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#">Главная</a></li>
+                    <li><a href="#">Каталог</a></li>
+                    <li><a href="#">О нас</a></li>
+                    <li><a href="#">Доставка</a></li>
+                    <li><a href="#">Контакты</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div class="search-cart">
+                    <div class="search-box">
+                        <input type="text" placeholder="Поиск товаров...">
+                    </div>
+                    <div class="cart-icon">
+                        🛒
+                        <div class="cart-count">3</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Герой секция -->
+<section class="hero">
+    <div class="container">
+        <h1>Профессиональное оборудование для пивоварения</h1>
+        <p>Все необходимое для создания идеального пива: от ЦКТ и котлов до клампов и пищевых насосов</p>
+        <a href="#" class="btn">Перейти в каталог</a>
+    </div>
+</section>
+
+<!-- Категории -->
+<section class="categories">
+    <div class="container">
+        <h2 class="section-title">Категории товаров</h2>
+        <div class="category-grid">
+            <div class="category-card">
+                <div class="category-img">⚗️</div>
+                <div class="category-content">
+                    <h3>ЦКТ (Циклонно-цилиндрические танки)</h3>
+                    <p>Профессиональные танки для брожения и дображивания пива</p>
+                    <a href="#" class="btn" style="margin-top: 1rem;">Смотреть</a>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-img">🔥</div>
+                <div class="category-content">
+                    <h3>Пивоваренные котлы</h3>
+                    <p>Котлы для затирания, кипячения и пастеризации</p>
+                    <a href="#" class="btn" style="margin-top: 1rem;">Смотреть</a>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-img">🔩</div>
+                <div class="category-content">
+                    <h3>Кламповая арматура</h3>
+                    <p>Соединительные элементы для пивопроводов</p>
+                    <a href="#" class="btn" style="margin-top: 1rem;">Смотреть</a>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-img">💧</div>
+                <div class="category-content">
+                    <h3>Пищевые насосы</h3>
+                    <p>Насосы для перекачки сусла, пива и других жидкостей</p>
+                    <a href="#" class="btn" style="margin-top: 1rem;">Смотреть</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Популярные товары -->
+<section class="featured-products">
+    <div class="container">
+        <h2 class="section-title">Популярные товары</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-img">ЦКТ 100л</div>
+                <div class="product-content">
+                    <h3>ЦКТ 100 литров</h3>
+                    <p>Циклонно-цилиндрический танк из нержавеющей стали</p>
+                    <div class="product-price">85 000 ₽</div>
+                    <div class="product-actions">
+                        <a href="#" class="btn">Подробнее</a>
+                        <a href="#" class="btn">В корзину</a>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img">Котел 50л</div>
+                <div class="product-content">
+                    <h3>Пивоваренный котел 50л</h3>
+                    <p>Котел для затирания и кипячения с ТЭН</p>
+                    <div class="product-price">45 000 ₽</div>
+                    <div class="product-actions">
+                        <a href="#" class="btn">Подробнее</a>
+                        <a href="#" class="btn">В корзину</a>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img">Насос</div>
+                <div class="product-content">
+                    <h3>Пищевой насос центробежный</h3>
+                    <p>Насос для перекачки сусла и пива</p>
+                    <div class="product-price">12 500 ₽</div>
+                    <div class="product-actions">
+                        <a href="#" class="btn">Подробнее</a>
+                        <a href="#" class="btn">В корзину</a>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img">Клампы</div>
+                <div class="product-content">
+                    <h3>Кламповый комплект</h3>
+                    <p>Набор кламповой арматуры для пивопровода</p>
+                    <div class="product-price">8 900 ₽</div>
+                    <div class="product-actions">
+                        <a href="#" class="btn">Подробнее</a>
+                        <a href="#" class="btn">В корзину</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- О нас -->
+<section class="about">
+    <div class="container">
+        <div class="about-content">
+            <div class="about-text">
+                <h2>О компании BrewMaster</h2>
+                <p>Мы специализируемся на поставках профессионального оборудования для пивоварения уже более 10 лет. Наша компания сотрудничает с ведущими производителями из Европы и России, чтобы предложить нашим клиентам лучшее оборудование по доступным ценам.</p>
+                <p>Наши специалисты всегда готовы помочь с выбором оборудования, проконсультировать по вопросам пивоварения и оказать техническую поддержку.</p>
+                <a href="#" class="btn" style="margin-top: 1.5rem;">Узнать больше</a>
+            </div>
+            <div class="about-image">🏭</div>
+        </div>
+    </div>
+</section>
+
+<!-- Преимущества -->
+<section class="benefits">
+    <div class="container">
+        <h2 class="section-title">Почему выбирают нас</h2>
+        <div class="benefits-grid">
+            <div class="benefit-item">
+                <div class="benefit-icon">🚚</div>
+                <h3>Быстрая доставка</h3>
+                <p>Доставляем оборудование по всей России в кратчайшие сроки</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon">🔧</div>
+                <h3>Гарантия и сервис</h3>
+                <p>Предоставляем гарантию на все оборудование и сервисное обслуживание</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon">💎</div>
+                <h3>Качество</h3>
+                <p>Работаем только с проверенными производителями</p>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon">📞</div>
+                <h3>Консультации</h3>
+                <p>Наши специалисты всегда готовы помочь с выбором</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Подвал -->
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>BrewMaster</h3>
+                <p>Профессиональное оборудование для пивоварения. Все для вашего успешного бизнеса.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Категории</h3>
+                <ul>
+                    <li><a href="#">ЦКТ</a></li>
+                    <li><a href="#">Котлы</a></li>
+                    <li><a href="#">Клампы</a></li>
+                    <li><a href="#">Насосы</a></li>
+                    <li><a href="#">Аксессуары</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Информация</h3>
+                <ul>
+                    <li><a href="#">О компании</a></li>
+                    <li><a href="#">Доставка и оплата</a></li>
+                    <li><a href="#">Гарантия</a></li>
+                    <li><a href="#">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Контакты</h3>
+                <ul>
+                    <li>📞 +7 (495) 123-45-67</li>
+                    <li>✉️ info@brewmaster.ru</li>
+                    <li>📍 Москва, ул. Пивоваренная, 15</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 BrewMaster. Все права защищены.</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
