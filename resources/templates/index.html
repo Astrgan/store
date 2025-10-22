@@ -91,15 +91,13 @@
     <div class="container">
         <h2 class="section-title">Популярные товары</h2>
         <div class="product-grid">
-
             <div th:each="product : ${products}" class="product-card">
-<!--                <img src="/product/0001/1.jpg" class="product-img">-->
                 <img th:src="${'/'+product.images().getFirst()}" class="product-img">
 
                 <div class="product-content">
-                    <h3>ЦКТ 360 литров</h3>
-                    <p>Циклонно-цилиндрический танк из нержавеющей стали</p>
-                    <div class="product-price">200 000 ₽</div>
+                    <h3 th:text="${product.name}">ЦКТ 360 литров</h3>
+                    <p th:text="${product.miniDescription}">Циклонно-цилиндрический танк из нержавеющей стали</p>
+                    <div th:text="${product.prise}" class="product-price">200 000 ₽</div>
                     <div class="product-actions">
                         <a href="#" class="btn">Подробнее</a>
                         <a href="#" class="btn">В корзину</a>

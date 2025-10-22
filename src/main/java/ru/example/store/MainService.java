@@ -27,15 +27,6 @@ public class MainService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("products: ");
-        System.out.println(products);
-        var p = getProducts().stream()
-                .collect(Collectors.groupingBy(
-                        Product::cat,
-                        Collectors.toCollection(() ->
-                                new TreeSet<>(Comparator.comparing(Product::id))
-                        )
-                ));
     }
 
     public Map<String, TreeSet<Product>> getAllProducts() {

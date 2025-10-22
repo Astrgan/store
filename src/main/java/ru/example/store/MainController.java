@@ -22,7 +22,6 @@ public class MainController {
         System.out.println(session.getId());
 
 
-
         model.addAttribute("products", mainService.getProducts());
         mainService.getProducts().stream().forEach(product -> System.out.println(product.images()));
         return "index";
