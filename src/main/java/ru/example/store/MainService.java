@@ -29,6 +29,10 @@ public class MainService {
         }
     }
 
+    public Product getProduct(String id){
+        return products.stream().filter(p->p.id().equals(id)).findFirst().orElse(null);
+    }
+
     public Map<String, TreeSet<Product>> getAllProducts() {
 
         return products.stream().collect(Collectors.groupingBy(

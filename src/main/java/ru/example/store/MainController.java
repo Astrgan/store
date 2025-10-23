@@ -4,10 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.Comparator;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class MainController {
@@ -18,12 +16,19 @@ public class MainController {
     }
 
     @GetMapping
-    String index(Model model, HttpSession session){
+    String index(Model model, HttpSession session, @RequestParam(defaultValue = "none") String cat) {
         System.out.println(session.getId());
-
-
-        model.addAttribute("products", mainService.getProducts());
-        mainService.getProducts().stream().forEach(product -> System.out.println(product.images()));
+        if (cat.equals("none")) {
+            model.addAttribute("products", mainService.getProducts());
+        } else {
+            model.addAttribute("products", mainService.getAllProducts().get(cat));
+        }
         return "index";
+    }
+
+    @GetMapping("/product/{id}")
+    String product(Model model, HttpSession session, @PathVariable String id) {
+        model.addAttribute("product", mainService.getProduct(id));
+        return "product";
     }
 }
