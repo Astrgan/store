@@ -175,6 +175,9 @@ header {
     margin-bottom: 2rem;
 }
 
+.button{
+    text-align: center;
+}
 
 .btn-primary {
     background-color: var(--primary);

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина - BrewMaster</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/car.css">
+</head>
+<body>
+<!-- Шапка -->
+<header>
+    <div class="container">
+        <div class="header-content">
+            <div class="logo">Brew<span>Master</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#">Главная</a></li>
+                    <li><a href="#">Каталог</a></li>
+                    <li><a href="#">О нас</a></li>
+                    <li><a href="#">Доставка</a></li>
+                    <li><a href="#">Контакты</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <div class="cart-count">3</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Хлебные крошки -->
+<div class="breadcrumbs">
+    <div class="container">
+        <a href="#">Главная</a> > <a href="#">Каталог</a> > <span>Корзина</span>
+    </div>
+</div>
+
+<!-- Основной контент -->
+<div class="container">
+    <h1 class="cart-title">Корзина покупок</h1>
+
+    <div class="cart-page">
+        <!-- Список товаров -->
+        <div class="cart-items">
+            <!--/*@thymesVar id="cart" type="ru.example.store.Cart"*/-->
+            <div th:each="product : ${cart.getProducts().keySet()}" class="cart-item">
+                <div class="cart-item-image">
+                    <img src="https://via.placeholder.com/150x150/ECF0F1/2C3E50?text=ЦКТ+100+л" alt="ЦКТ 100 литров">
+                </div>
+                <div class="cart-item-details">
+                    <h3 class="cart-item-title" th:text="${product.name()}" >ЦКТ 100 литров</h3>
+                    <div class="cart-item-price" th:text="${product.prise()}">85 000 ₽</div>
+                    <div class="cart-item-actions">
+                        <div class="quantity-controls">
+                            <button class="quantity-btn minus">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1">
+                            <button class="quantity-btn plus">+</button>
+                        </div>
+                        <button class="remove-btn" title="Удалить товар">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Панель итогов -->
+        <div class="cart-summary">
+            <h3 class="summary-title">Ваш заказ</h3>
+
+            <div class="summary-row">
+                <span>Товары (4 шт.)</span>
+                <span>109 400 ₽</span>
+            </div>
+
+            <div class="summary-total">
+                <span>Итого:</span>
+                <span class="amount" th:text="${sum}">105 900 ₽</span>
+            </div>
+
+            <button class="btn btn-primary">Перейти к оформлению</button>
+            <button class="btn btn-outline">Продолжить покупки</button>
+
+            <div class="continue-shopping">
+                <a href="#"><i class="fas fa-arrow-left"></i> Вернуться в каталог</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Подвал -->
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>BrewMaster</h3>
+                <p>Профессиональное оборудование для пивоварения. Все для вашего успешного бизнеса.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Категории</h3>
+                <ul>
+                    <li><a href="#">ЦКТ</a></li>
+                    <li><a href="#">Котлы</a></li>
+                    <li><a href="#">Клампы</a></li>
+                    <li><a href="#">Насосы</a></li>
+                    <li><a href="#">Аксессуары</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Информация</h3>
+                <ul>
+                    <li><a href="#">О компании</a></li>
+                    <li><a href="#">Доставка и оплата</a></li>
+                    <li><a href="#">Гарантия</a></li>
+                    <li><a href="#">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Контакты</h3>
+                <ul>
+                    <li><i class="fas fa-phone"></i> +7 (495) 123-45-67</li>
+                    <li><i class="fas fa-envelope"></i> info@brewmaster.ru</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Москва, ул. Пивоваренная, 15</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 BrewMaster. Все права защищены.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Управление количеством товаров
+    document.querySelectorAll('.quantity-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const input = this.parentElement.querySelector('.quantity-input');
+            let value = parseInt(input.value);
+
+            if (this.classList.contains('plus')) {
+                value++;
+            } else if (this.classList.contains('minus') && value > 1) {
+                value--;
+            }
+
+            input.value = value;
+            updateCartTotal();
+        });
+    });
+
+    // Удаление товаров из корзины
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const cartItem = this.closest('.cart-item');
+            cartItem.style.animation = 'fadeOut 0.3s ease';
+
+            setTimeout(() => {
+                cartItem.remove();
+                updateCartTotal();
+                updateCartCount();
+
+                // Если корзина пуста, показываем сообщение
+                if (document.querySelectorAll('.cart-item').length === 0) {
+                    showEmptyCart();
+                }
+            }, 300);
+        });
+    });
+
+    // Обновление общей суммы
+    function updateCartTotal() {
+        // В реальном приложении здесь будет расчет общей суммы
+        console.log('Обновление общей суммы корзины');
+    }
+
+    // Обновление счетчика товаров в корзине
+    function updateCartCount() {
+        const cartCount = document.querySelector('.cart-count');
+        const currentCount = parseInt(cartCount.textContent);
+        cartCount.textContent = currentCount - 1;
+    }
+
+    // Показать сообщение о пустой корзине
+    function showEmptyCart() {
+        const cartItems = document.querySelector('.cart-items');
+        cartItems.innerHTML = `
+                <div class="cart-empty">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Ваша корзина пуста</h3>
+                    <p>Добавьте товары из каталога, чтобы сделать заказ</p>
+                    <button class="btn btn-primary" style="margin-top: 1.5rem; width: auto;">Перейти в каталог</button>
+                </div>
+            `;
+    }
+
+    // Добавляем CSS анимацию для удаления товаров
+    const style = document.createElement('style');
+    style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+        `;
+    document.head.appendChild(style);
+</script>
+</body>
+</html>

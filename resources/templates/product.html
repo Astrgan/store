@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/product.css">
+
     <style>
         /* Добавляем базовые стили для product-details на случай, если CSS файлы не загружаются */
         .product-details {
@@ -34,6 +35,23 @@
     <div class="container">
         <div class="header-content">
             <div class="logo">Brew<span>Master</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#">Главная</a></li>
+                    <li><a href="#">Каталог</a></li>
+                    <li><a href="#">О нас</a></li>
+                    <li><a href="#">Доставка</a></li>
+                    <li><a href="#">Контакты</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div class="search-cart">
+                    <div class="cart-icon">
+                        🛒
+                        <div class="cart-count">3</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </header>
@@ -41,7 +59,7 @@
 <!-- Хлебные крошки -->
 <div class="breadcrumbs">
     <div class="container">
-        <a href="#">Главная</a> > <a href="#">Каталог</a> > <a href="#">ЦКТ</a> > <span>ЦКТ 100 литров</span>
+        <a href="#">Главная</a> > <a href="/">Каталог</a> > <a th:href="${'/?cat='+product.cat()}" th:text="${product.cat()}">ЦКТ</a> > <span th:text="${product.name()}">ЦКТ 100 литров</span>
     </div>
 </div>
 
@@ -51,37 +69,18 @@
         <!-- Галерея изображений -->
         <div class="product-gallery">
             <div class="main-image">
-                <img src="https://via.placeholder.com/600x400/ECF0F1/2C3E50?text=ЦКТ+100+л" alt="ЦКТ 100 литров" id="mainImage">
+                <img th:src="${'/'+product.images().get(0)}" alt="ЦКТ 100 литров" id="mainImage">
             </div>
             <div class="thumbnail-gallery">
-                <div class="thumbnail active" data-image="https://via.placeholder.com/600x400/ECF0F1/2C3E50?text=ЦКТ+100+л">
-                    <img src="https://via.placeholder.com/100x80/ECF0F1/2C3E50?text=1" alt="ЦКТ 100 литров вид 1">
-                </div>
-                <div class="thumbnail" data-image="https://via.placeholder.com/600x400/ECF0F1/2C3E50?text=Внутреннее+устройство">
-                    <img src="https://via.placeholder.com/100x80/ECF0F1/2C3E50?text=2" alt="ЦКТ 100 литров вид 2">
-                </div>
-                <div class="thumbnail" data-image="https://via.placeholder.com/600x400/ECF0F1/2C3E50?text=Люк+и+арматура">
-                    <img src="https://via.placeholder.com/100x80/ECF0F1/2C3E50?text=3" alt="ЦКТ 100 литров вид 3">
-                </div>
-                <div class="thumbnail" data-image="https://via.placeholder.com/600x400/ECF0F1/2C3E50?text=Комплектация">
-                    <img src="https://via.placeholder.com/100x80/ECF0F1/2C3E50?text=4" alt="ЦКТ 100 литров вид 4">
+                <div th:each="image : ${product.images()}" class="thumbnail active" th:attr="data-image=${'/'+image}">
+                    <img th:src="${'/'+image}" alt="ЦКТ 100 литров вид 1">
                 </div>
             </div>
         </div>
 
         <!-- Информация о товаре -->
-        <!--/*@thymesVar id="product" type="ru.example.store.Product"*/-->
         <div class="product-info">
             <h1 th:text="${product.name}" class="product-title">ЦКТ 100 литров</h1>
-            <div class="product-rating">
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                </div>
-            </div>
             <div th:text="${product.prise()}" class="product-price">85 000 ₽</div>
             <div class="product-description">
                 <p th:text="${product.miniDescription()}"></p>
@@ -93,7 +92,7 @@
             </div>
 
             <div class="action-buttons">
-                <button class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Добавить в корзину</button>
+                <a th:href="${'/add/'+product.id()}" class="button btn btn-primary"><i class="fas fa-shopping-cart"></i> Добавить в корзину</a>
             </div>
         </div>
     </div>
@@ -165,15 +164,6 @@
         });
     });
 
-    // Обработка добавления в корзину
-    document.querySelector('.btn-primary').addEventListener('click', function() {
-        const quantity = document.querySelector('.quantity-input').value;
-        alert(`Товар "ЦКТ 100 литров" в количестве ${quantity} шт. добавлен в корзину!`);
-
-        // Обновляем счетчик корзины
-        const cartCount = document.querySelector('.cart-count');
-        cartCount.textContent = parseInt(cartCount.textContent) + parseInt(quantity);
-    });
 </script>
 </body>
 </html>

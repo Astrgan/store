@@ -23,9 +23,6 @@
             </nav>
             <div class="header-actions">
                 <div class="search-cart">
-                    <div class="search-box">
-                        <input type="text" placeholder="Поиск товаров...">
-                    </div>
                     <div class="cart-icon">
                         🛒
                         <div class="cart-count">3</div>
@@ -41,7 +38,7 @@
     <div class="container">
         <h1>Профессиональное оборудование для пивоварения</h1>
         <p>Все необходимое для создания идеального пива: от ЦКТ и котлов до клампов и пищевых насосов</p>
-        <a href="#" class="btn">Перейти в каталог</a>
+
     </div>
 </section>
 
@@ -55,7 +52,7 @@
                 <div class="category-content">
                     <h3>ЦКТ (Циклонно-цилиндрические танки)</h3>
                     <p>Профессиональные танки для брожения</p>
-                    <a href="/?cat=cct" class="btn" style="margin-top: 1rem;">Смотреть</a>
+                    <a href="/?cat=ЦКТ" class="btn" style="margin-top: 1rem;">Смотреть</a>
                 </div>
             </div>
             <div class="category-card">
@@ -63,7 +60,7 @@
                 <div class="category-content">
                     <h3>Пивоваренные котлы<br><br></h3>
                     <p>Котлы для затирания, кипячения и пастеризации</p>
-                    <a href="/?cat=kettle" class="btn" style="margin-top: 1rem;">Смотреть</a>
+                    <a href="/?cat=Котлы" class="btn" style="margin-top: 1rem;">Смотреть</a>
                 </div>
             </div>
             <div class="category-card">
@@ -71,7 +68,7 @@
                 <div class="category-content">
                     <h3>Кламповая арматура<br><br></h3>
                     <p>Соединительные элементы для пивопроводов</p>
-                    <a href="/?cat=devise" class="btn" style="margin-top: 1rem;">Смотреть</a>
+                    <a href="/?cat=Комплектующие" class="btn" style="margin-top: 1rem;">Смотреть</a>
                 </div>
             </div>
             <div class="category-card">
@@ -100,8 +97,8 @@
                     <p th:text="${product.miniDescription}">Циклонно-цилиндрический танк из нержавеющей стали</p>
                     <div th:text="${product.prise}" class="product-price">200 000 ₽</div>
                     <div class="product-actions">
-                        <a href="#" class="btn">Подробнее</a>
-                        <a href="#" class="btn">В корзину</a>
+                        <a th:href="${'/product/'+product.id()}" class="btn">Подробнее</a>
+                        <a th:href="${'/add/'+product.id()}" class="btn">В корзину</a>
                     </div>
                 </div>
             </div>
@@ -124,34 +121,6 @@
     </div>
 </section>
 
-<!-- Преимущества -->
-<section class="benefits">
-    <div class="container">
-        <h2 class="section-title">Почему выбирают нас</h2>
-        <div class="benefits-grid">
-            <div class="benefit-item">
-                <div class="benefit-icon">🚚</div>
-                <h3>Быстрая доставка</h3>
-                <p>Доставляем оборудование по всей России в кратчайшие сроки</p>
-            </div>
-            <div class="benefit-item">
-                <div class="benefit-icon">🔧</div>
-                <h3>Гарантия и сервис</h3>
-                <p>Предоставляем гарантию на все оборудование и сервисное обслуживание</p>
-            </div>
-            <div class="benefit-item">
-                <div class="benefit-icon">💎</div>
-                <h3>Качество</h3>
-                <p>Работаем только с проверенными производителями</p>
-            </div>
-            <div class="benefit-item">
-                <div class="benefit-icon">📞</div>
-                <h3>Консультации</h3>
-                <p>Наши специалисты всегда готовы помочь с выбором</p>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- Подвал -->
 <footer>
